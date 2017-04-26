@@ -1,7 +1,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "bento/debian-7.8"
+  config.vm.box = "debian/jessie64"
 
   # IP
   config.vm.network "private_network", ip: "192.168.50.129"

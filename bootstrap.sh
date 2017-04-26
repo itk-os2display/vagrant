@@ -2,73 +2,72 @@
 
 # APT
 echo "Updating APT"
-apt-get update > /dev/null 2>&1
+apt-get update ###> /dev/null 2>&1
 
 # Set timezone.
 echo "Setting up timezone..."
 echo "Europe/Copenhagen" > /etc/timezone
-/usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2>&1
+/usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata ###> /dev/null 2>&1
 
 # Set locale
 echo "Setting up locale..."
 echo en_GB.UTF-8 UTF-8 > /etc/locale.gen
 echo en_DK.UTF-8 UTF-8 >> /etc/locale.gen
 echo da_DK.UTF-8 UTF-8 >> /etc/locale.gen
-/usr/sbin/locale-gen > /dev/null 2>&1
-export LANGUAGE=en_DK.UTF-8 > /dev/null 2>&1
-export LC_ALL=en_DK.UTF-8 > /dev/null 2>&1
-/usr/sbin/dpkg-reconfigure --frontend noninteractive locales > /dev/null 2>&1
+/usr/sbin/locale-gen ###> /dev/null 2>&1
+export LANGUAGE=en_DK.UTF-8 ###> /dev/null 2>&1
+export LC_ALL=en_DK.UTF-8 ###> /dev/null 2>&1
+/usr/sbin/dpkg-reconfigure --frontend noninteractive locales ###> /dev/null 2>&1
 
 # Add dotdeb
 cat > /etc/apt/sources.list.d/dotdeb.list <<DELIM
-deb http://packages.dotdeb.org wheezy all
-deb-src http://packages.dotdeb.org wheezy all
-
-deb http://packages.dotdeb.org wheezy-php55 all
-deb-src http://packages.dotdeb.org wheezy-php55 all
+deb http://packages.dotdeb.org jessie all
+deb-src http://packages.dotdeb.org jessie all
 DELIM
-wget http://www.dotdeb.org/dotdeb.gpg > /dev/null 2>&1
-apt-key add dotdeb.gpg  > /dev/null 2>&1
+wget http://www.dotdeb.org/dotdeb.gpg ###> /dev/null 2>&1
+apt-key add dotdeb.gpg  ###> /dev/null 2>&1
 rm dotdeb.gpg
-apt-get update > /dev/null 2>&1
+apt-get update ###> /dev/null 2>&1
+
+apt-get install -y curl ###> /dev/null 2>&1
 
 # Mysql
 echo "Configuring mysql"
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password vagrant' > /dev/null 2>&1
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password vagrant' > /dev/null 2>&1
+debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password vagrant' ###> /dev/null 2>&1
+debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password vagrant' ###> /dev/null 2>&1
 
-apt-get install -y mysql-server > /dev/null 2>&1
+apt-get install -y mysql-server ###> /dev/null 2>&1
 
-# PHP5
+# PHP
 echo "Installing php"
-apt-get install -y php5-fpm php5-cli php5-xdebug php5-mysql php5-curl php5-gd git > /dev/null 2>&1
+apt-get install -y php7.0-fpm php7.0-cli php7.0-xdebug php7.0-mysql php7.0-curl php7.0-gd php7.0-xml php7.0-mbstring git ###> /dev/null 2>&1
 
-sed -i '/;date.timezone =/c date.timezone = Europe/Copenhagen' /etc/php5/cli/php.ini
-sed -i '/;date.timezone =/c date.timezone = Europe/Copenhagen' /etc/php5/fpm/php.ini
+sed -i '/;date.timezone =/c date.timezone = Europe/Copenhagen' /etc/php/7.0/cli/php.ini
+sed -i '/;date.timezone =/c date.timezone = Europe/Copenhagen' /etc/php/7.0/fpm/php.ini
 
-sed -i '/upload_max_filesize = 2M/cupload_max_filesize = 256M' /etc/php5/fpm/php.ini
-sed -i '/post_max_size = 8M/cpost_max_size = 300M' /etc/php5/fpm/php.ini
+sed -i '/upload_max_filesize = 2M/cupload_max_filesize = 256M' /etc/php/7.0/fpm/php.ini
+sed -i '/post_max_size = 8M/cpost_max_size = 300M' /etc/php/7.0/fpm/php.ini
 
-sed -i '/;listen.owner = www-data/c listen.owner = vagrant' /etc/php5/fpm/pool.d/www.conf
-sed -i '/;listen.group = www-data/c listen.group = vagrant' /etc/php5/fpm/pool.d/www.conf
-sed -i '/;listen.mode = 0660/c listen.mode = 0660' /etc/php5/fpm/pool.d/www.conf
+sed -i '/;listen.owner = www-data/c listen.owner = vagrant' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i '/;listen.group = www-data/c listen.group = vagrant' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i '/;listen.mode = 0660/c listen.mode = 0660' /etc/php/7.0/fpm/pool.d/www.conf
 
 # Set php memory limit to 256mb
-sed -i '/memory_limit = 128M/c memory_limit = 256M' /etc/php5/fpm/php.ini
+sed -i '/memory_limit = 128M/c memory_limit = 256M' /etc/php/7.0/fpm/php.ini
 
 # Redis
 echo "Installing redis"
-apt-get install -y redis-server > /dev/null 2>&1
+apt-get install -y redis-server ###> /dev/null 2>&1
 
 # Memcache
 echo "Installing memcache"
-apt-get install -y memcached php5-memcached > /dev/null 2>&1
+apt-get install -y memcached php7.0-memcached ###> /dev/null 2>&1
 
 # APC
 echo "Configuring APC"
-apt-get install -y php-apc > /dev/null 2>&1
+apt-get install -y php7.0-apcu ###> /dev/null 2>&1
 
-cat > /etc/php5/conf.d/apc.ini <<DELIM
+cat <<DELIM >> /etc/php/7.0/mods-available/apcu.ini
 apc.enabled=1
 apc.shm_segments=1
 apc.optimization=0
@@ -84,7 +83,7 @@ DELIM
 # x-debug
 echo "Configure x-debug"
 
-cat << DELIM >> /etc/php5/conf.d/20-xdebug.ini
+cat << DELIM >> /etc/php/7.0/mods-available/xdebug.ini
 xdebug.remote_enable=1
 xdebug.remote_handler=dbgp
 xdebug.remote_host=192.168.50.1
@@ -94,7 +93,7 @@ DELIM
 
 # Nginx
 echo "Installing nginx"
-apt-get install -y nginx > /dev/null 2>&1
+apt-get install -y nginx ###> /dev/null 2>&1
 unlink /etc/nginx/sites-enabled/default
 
 # Setup web root
@@ -139,7 +138,7 @@ server {
   }
 
   location ~ ^/(app|app_dev|config)\.php(/|\$) {
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)\$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
@@ -400,7 +399,7 @@ server {
   }
 
   location ~ \.php\$ {
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)\$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
@@ -555,18 +554,18 @@ echo "Installing nodejs"
 wget https://deb.nodesource.com/setup_4.x -O /tmp/node_install.sh
 chmod 700 /tmp/node_install.sh
 /tmp/node_install.sh
-apt-get update > /dev/null 2>&1
-apt-get install -y nodejs > /dev/null 2>&1
+apt-get update ###> /dev/null 2>&1
+apt-get install -y nodejs ###> /dev/null 2>&1
 
 # Search node requirements
 echo "Installing search_node requirements"
-su vagrant -c "cd /vagrant/htdocs/search_node && ./install.sh" > /dev/null 2>&1
+su vagrant -c "cd /vagrant/htdocs/search_node && ./install.sh" ###> /dev/null 2>&1
 
 # Search node requirements
 echo "Installing middleware requirements"
 # @TODO: remove this when logger plugin can handle a non-existing directory
 mkdir /vagrant/htdocs/middleware/logs
-su vagrant -c "cd /vagrant/htdocs/middleware && ./install.sh" > /dev/null 2>&1
+su vagrant -c "cd /vagrant/htdocs/middleware && ./install.sh" ###> /dev/null 2>&1
 
 # Search node config
 cd /vagrant/htdocs/search_node/
@@ -772,17 +771,17 @@ cp /etc/init.d/search_node /etc/init.d/middleware
 sed -i 's/search_node/middleware/g' /etc/init.d/middleware
 
 # Update rc
-update-rc.d middleware defaults > /dev/null 2>&1
-update-rc.d search_node defaults > /dev/null 2>&1
+update-rc.d middleware defaults ###> /dev/null 2>&1
+update-rc.d search_node defaults ###> /dev/null 2>&1
 
 # Create database
 echo "Setting up database os2display"
-echo "create database os2display" | mysql -uroot -pvagrant > /dev/null 2>&1
+echo "create database os2display" | mysql -uroot -pvagrant ###> /dev/null 2>&1
 
 # Get composer
 echo "Setting up composer"
 cd /vagrant/htdocs/admin
-curl -sS http://getcomposer.org/installer | php  > /dev/null 2>&1
+curl -sS http://getcomposer.org/installer | php  ###> /dev/null 2>&1
 
 # Config file for admin_os2display
 cat > /vagrant/htdocs/admin/app/config/parameters.yml <<DELIM
@@ -855,12 +854,12 @@ parameters:
     itk_log_log_level: all
 DELIM
 
-php composer.phar install > /dev/null 2>&1
-php app/console doctrine:migrations:migrate --no-interaction > /dev/null 2>&1
+php composer.phar install ###> /dev/null 2>&1
+php app/console doctrine:migrations:migrate --no-interaction ###> /dev/null 2>&1
 
 # Setup super-user
 echo "Setting up super-user: admin/admin"
-php app/console fos:user:create --super-admin admin test@etek.dk admin > /dev/null 2>&1
+php app/console fos:user:create --super-admin admin test@etek.dk admin ###> /dev/null 2>&1
 
 # Fix /etc/hosts
 echo "Add *.os2display.vm to hosts"
@@ -872,46 +871,46 @@ echo "127.0.1.1 styleguide.os2display.vm" >> /etc/hosts
 
 # Elastic search
 echo "Installing elasticsearch"
-apt-get install openjdk-7-jre -y > /dev/null 2>&1
+apt-get install openjdk-7-jre -y ###> /dev/null 2>&1
 cd /root
-wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.1.deb > /dev/null 2>&1
-dpkg -i elasticsearch-1.7.1.deb > /dev/null 2>&1
+wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.1.deb ###> /dev/null 2>&1
+dpkg -i elasticsearch-1.7.1.deb ###> /dev/null 2>&1
 rm elasticsearch-1.7.1.deb
-update-rc.d elasticsearch defaults 95 10 > /dev/null 2>&1
+update-rc.d elasticsearch defaults 95 10 ###> /dev/null 2>&1
 
 # Elasticsearch plugins
-/usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-analysis-icu/2.5.0 > /dev/null 2>&1
-/usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head > /dev/null 2>&1
+/usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-analysis-icu/2.5.0 ###> /dev/null 2>&1
+/usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head ###> /dev/null 2>&1
 
 # Install gulp
-su vagrant -c "npm install -g gulp" > /dev/null 2>&1
-su vagrant -c "/vagrant/htdocs/styleguide && npm install" > /dev/null 2>&1
-su vagrant -c "/vagrant/htdocs/admin && npm install" > /dev/null 2>&1
-su vagrant -c "/vagrant/htdocs/screen && npm install" > /dev/null 2>&1
+su vagrant -c "npm install -g gulp" ###> /dev/null 2>&1
+su vagrant -c "cd /vagrant/htdocs/styleguide && npm install" ###> /dev/null 2>&1
+su vagrant -c "cd /vagrant/htdocs/admin && npm install" ###> /dev/null 2>&1
+su vagrant -c "cd /vagrant/htdocs/screen && npm install" ###> /dev/null 2>&1
 
 # Add symlink.
 ln -s /vagrant/htdocs/ /home/vagrant
 
-echo "Starting php5-fpm"
-service php5-fpm start > /dev/null 2>&1
+# echo "Starting php7.0-fpm"
+service php7.0-fpm start ###> /dev/null 2>&1
 
-echo "Starting nginx"
-service nginx restart > /dev/null 2>&1
+# echo "Starting nginx"
+service nginx restart ###> /dev/null 2>&1
 
 echo "Starting mysql"
-service mysql start > /dev/null 2>&1
+service mysql start ###> /dev/null 2>&1
 
 echo "Starting ElasticSearch"
-service elasticsearch restart > /dev/null 2>&1
+service elasticsearch restart ###> /dev/null 2>&1
 
 echo "Starting redis"
-service redis-server restart > /dev/null 2>&1
+service redis-server restart ###> /dev/null 2>&1
 
 echo "Starting search_node"
-service search_node start > /dev/null 2>&1
+service search_node start ###> /dev/null 2>&1
 
 echo "Starting middleware"
-service middleware start > /dev/null 2>&1
+service middleware start ###> /dev/null 2>&1
 
 echo "Adding crontab"
 crontab -l > mycron
