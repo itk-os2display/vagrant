@@ -9,10 +9,8 @@
     domain: "os2display.vm"
 
   pre_tasks:
-    # Tasks that shold be run before roles.
 
   post_tasks:
-    # Tasks that shold be run after roles.
     - include: tasks/nginx.yml
     - include: tasks/sites.yml
 
