@@ -1,7 +1,10 @@
 #!/bin/bash
 
 cd /vagrant/htdocs/search_node && ./install.sh
+
 cd /vagrant/htdocs/middleware && ./install.sh
+echo "{}" > /vagrant/htdocs/middleware/blacklist.json
+echo "admin:$apr1$Y1yCQDGL$conrM8TWeATZ7Wc0YX/Zu/" > /vagrant/htdocs/middleware/dashboard.htpasswd
 
 echo "create database os2display" | mysql -uroot
 
