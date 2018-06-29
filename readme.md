@@ -66,7 +66,30 @@ scripts/dev_setup.sh
 scripts/dev_config.sh
 </pre>
 
-# Troubleshoot
+# Troubleshooting
+
+## Search - no mappings
+If you get the following error in the admin:
+<pre>
+Search error.
+Cause: No Living connections
+</pre>
+
+Make sure elasticsearch is running.
+<pre>
+ps -ef | grep elasticsearch
+</pre>
+
+Make sure the /var/run/elasticsearch directory is created with the correct permissions:
+<pre>
+sudo mkdir -p /var/run/elasticsearch
+sudo chown elasticsearch /var/run/elasticsearch
+</pre>
+
+Start it with:
+<pre>
+sudo service elasticsearch start
+</pre>
 
 ## Setup search
 If the indexes are not activated by the `scripts/search_activate.sh` script, do the following:
