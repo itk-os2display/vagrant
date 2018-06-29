@@ -62,8 +62,17 @@ And accepting the certificates.
 I you want to run in development mode. Run the following scripts.
 
 <pre>
-scripts/dev_setup.sh
-scripts/dev_config.sh
+./scripts/dev_setup.sh
+./scripts/dev_config.sh
+</pre>
+
+Make sure to run the same php versions as inside the vagrant.
+
+Afterwards, make sure assets are correctly installed. If not:
+<pre>
+vagrant ssh
+cd /vagrant/htdocs/admin
+app/console assets:install --symlink --relative
 </pre>
 
 # Troubleshooting
@@ -89,7 +98,10 @@ sudo chown elasticsearch /var/run/elasticsearch
 Start it with:
 <pre>
 sudo service elasticsearch start
+sudo service supervisor restart
 </pre>
+
+Or use the script `scripts/fix_elasticsearch.sh` from inside the vagrant.
 
 ## Setup search
 If the indexes are not activated by the `scripts/search_activate.sh` script, do the following:

@@ -12,10 +12,30 @@ cd packages
 mkdir os2display
 cd os2display
 
-git clone --branch=master git@github.com:os2display/core-bundle
-git clone --branch=master git@github.com:os2display/media-bundle
-git clone --branch=master git@github.com:os2display/admin-bundle
-git clone --branch=master git@github.com:os2display/default-template-bundle
+function clone_latest {
+  git clone --branch=master git@github.com:os2display/$1
+
+  cd $1
+
+  latesttag=$(git describe --tags)
+  echo checking out ${latesttag}
+  git checkout ${latesttag}
+
+  cd ..
+}
+
+BUNDLES="core-bundle
+media-bundle
+admin-bundle
+default-template-bundle"
+
+for BUNDLE in $BUNDLES
+do
+(
+    clone_latest $BUNDLE
+)
+done
+
 cd ..
 
 cd ..
