@@ -6,6 +6,7 @@ This vagrant provides the setup for a local version of the os2display server set
  * Runs Ubuntu.
  * It installs nginx, php, mysql, symfony, nodejs, redis, etc.
  * It installs a database "os2display" for the symfony backend.
+ * Creates the user admin:admin for the backend.
  * Afterwards it starts up the search and middleware nodejs apps.
 
 # Vagrant setup
@@ -16,9 +17,12 @@ vagrant plugin install vagrant-hostsupdater
 </pre>
 
 # Installation
-You should use the install.sh script to create the htdocs folder which clones the repositories from http://github.com/itk-os2display.
+You should use the install.sh script to create the htdocs folder which clones
+the repositories from http://github.com/os2display.
 
-__NOTE__: It's important that you have clone the repositories into the htdocs folder before trying to boot the vagrant, as it uses configuration files located in the repositories during setup.
+__NOTE__: It's important that you have clone the repositories into the htdocs
+folder before trying to boot the vagrant, as it uses configuration files
+located in the repositories during setup.
 
 <pre>
 install.sh
