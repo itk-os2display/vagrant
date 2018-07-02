@@ -13,10 +13,10 @@ mkdir os2display
 cd os2display
 
 function clone_latest {
-  git clone --branch=master https://github.com/os2display/$1.git
+  git clone --branch=master https://github.com/itk-os2display/$1.git
 
 #  If you can use ssh access to the git repository, you can do this instead:
-#  git clone --branch=master git@github.com:os2display/$1.git
+#  git clone --branch=master git@github.com:itk-os2display/$1.git
 
   cd $1
 
