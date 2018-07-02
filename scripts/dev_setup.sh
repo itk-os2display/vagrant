@@ -9,16 +9,13 @@ cd $base_dir
 mkdir packages
 cd packages
 
-mkdir os2display
-cd os2display
-
 function clone_latest {
-  git clone --branch=master https://github.com/itk-os2display/$1.git
+#  git clone --branch=master https://github.com/$1/$2.git
 
 #  If you can use ssh access to the git repository, you can do this instead:
-#  git clone --branch=master git@github.com:itk-os2display/$1.git
+  git clone --branch=master git@github.com:$1/$2.git
 
-  cd $1
+  cd $2
 
   latesttag=$(git describe --tags)
   echo checking out ${latesttag}
@@ -26,6 +23,11 @@ function clone_latest {
 
   cd ..
 }
+
+## os2display bundles.
+
+mkdir os2display
+cd os2display
 
 BUNDLES="core-bundle
 media-bundle
@@ -35,7 +37,45 @@ default-template-bundle"
 for BUNDLE in $BUNDLES
 do
 (
-    clone_latest $BUNDLE
+    clone_latest "itk-os2display" $BUNDLE
+)
+done
+
+cd ..
+
+## aakb bundles.
+
+mkdir aakb
+cd aakb
+
+BUNDLES="os2display-aarhus-templates"
+
+for BUNDLE in $BUNDLES
+do
+(
+    clone_latest "aakb" $BUNDLE
+)
+done
+
+cd ..
+
+## itk-os2display bundles.
+
+mkdir itk-os2display
+cd itk-os2display
+
+BUNDLES="os2display-koba-integration
+lokalcenter-template-bundle
+template-extension-bundle
+aarhus-second-template-bundle
+aarhus-data-bundle
+vimeo-bundle
+campaign-bundle"
+
+for BUNDLE in $BUNDLES
+do
+(
+    clone_latest "itk-os2display" $BUNDLE
 )
 done
 
